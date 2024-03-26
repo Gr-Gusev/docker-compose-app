@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    volumes:
+      - ./app_db_volume:/var/lib/mysql/
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    expose:
+      - 3306
+    environment:
+      - MYSQL_DATABASE=app_db
+      - MYSQL_ROOT_PASSWORD=pass
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "--silent"]
+      interval: 3s
+
+  server:
+    container_name: app
+    build: .
+    ports:
+      - 7777:7777
+    environment:
+      - DB_USER=root
+      - DB_PASSWORD=pass
+      - DB_HOST=mysql
+      - DB_NAME=app_db
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: on-failure
