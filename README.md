@@ -2,6 +2,10 @@
 
 ## Сборка и запуск приложения
 
-`docker compose build & docker compose up`
+```bash
+git clone https://github.com/Gr-Gusev/docker-compose-app.git
+cd docker-compose-app
+docker compose up
+```
 
 Приложение доступно по адресу `localhost:7777`.
